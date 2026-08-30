@@ -1,0 +1,870 @@
+/* ————————————————————————————————————————————————————————————————
+   The Diary of T. M. Riddle — a book of aged paper open on a dark
+   desk. Iron-gall ink, folded corners, a breath of candlelight.
+   ———————————————————————————————————————————————————————————————— */
+
+:root {
+  --desk: #171009;
+  --desk-warm: #241708;
+  --paper: #ede1c5;
+  --paper-deep: #e0d0ab;
+  --paper-edge: #c9b489;
+  --ink-writer: #2c3a57; /* the writer's blue-black */
+  --ink-tom: #241a10; /* Tom's faded sepia-black */
+  --ink-whisper: rgba(87, 65, 37, 0.62); /* the diary's own voice */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--desk);
+  overflow: hidden; /* the desk never scrolls — pages scroll within themselves */
+}
+
+::selection {
+  background: rgba(44, 58, 87, 0.25);
+}
+
+/* ——— the desk ——— */
+
+.scene {
+  height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: clamp(0px, 3vmin, 40px);
+  background:
+    radial-gradient(120% 90% at 50% 0%, var(--desk-warm) 0%, transparent 55%),
+    radial-gradient(90% 70% at 50% 105%, #0d0804 0%, transparent 60%),
+    var(--desk);
+  cursor: text;
+}
+
+/* ——— the open book ——— */
+
+.book {
+  grid-area: 1 / 1;
+  display: flex;
+  align-items: stretch;
+  width: min(1340px, 100%);
+  height: min(100dvh - min(6vmin, 80px), 940px);
+  justify-content: center;
+}
+
+.book.revealing {
+  animation: bookReveal 1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes bookReveal {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ——— a page ——— */
+
+.paper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(28px, 6vmin, 78px) clamp(26px, 5vmin, 60px) clamp(52px, 8vmin, 96px);
+  background:
+    /* foxing — faint age stains */
+    radial-gradient(220px 160px at 84% 12%, rgba(150, 108, 47, 0.07), transparent 70%),
+    radial-gradient(340px 260px at 8% 78%, rgba(122, 84, 34, 0.06), transparent 70%),
+    radial-gradient(160px 130px at 22% 8%, rgba(150, 108, 47, 0.05), transparent 70%),
+    radial-gradient(500px 380px at 55% 45%, rgba(255, 249, 231, 0.35), transparent 75%),
+    /* darkened, handled edges */
+    linear-gradient(90deg, var(--paper-deep) 0%, var(--paper) 7%, var(--paper) 93%, var(--paper-deep) 100%),
+    var(--paper);
+}
+
+/* paper grain */
+.paper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.45 0 0 0 0 0.36 0 0 0 0 0.24 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* a lone page — proportioned like a real leaf (~A4), never squat */
+.paper.pageSingle {
+  width: min(720px, 100%, calc(min(100dvh - min(6vmin, 80px), 940px) * 0.72));
+  border-radius: 3px;
+  box-shadow:
+    inset 0 0 60px rgba(96, 70, 34, 0.18),
+    inset 0 0 6px rgba(96, 70, 34, 0.12),
+    0 2px 3px rgba(0, 0, 0, 0.5),
+    0 18px 60px rgba(0, 0, 0, 0.65),
+    0 40px 120px rgba(0, 0, 0, 0.5),
+    2px 3px 0 rgba(222, 205, 165, 0.8),
+    4px 6px 0 rgba(201, 180, 137, 0.55),
+    6px 9px 0 rgba(178, 155, 112, 0.35);
+}
+
+/* the left leaf of a spread */
+.paper.pageL {
+  flex: 1 1 50%;
+  min-width: 0;
+  max-width: 670px;
+  border-radius: 3px 0 0 3px;
+  box-shadow:
+    inset 0 0 60px rgba(96, 70, 34, 0.18),
+    inset -34px 0 44px -24px rgba(60, 42, 18, 0.42),
+    0 2px 3px rgba(0, 0, 0, 0.5),
+    0 18px 60px rgba(0, 0, 0, 0.65),
+    0 40px 120px rgba(0, 0, 0, 0.5),
+    -2px 3px 0 rgba(222, 205, 165, 0.8),
+    -4px 6px 0 rgba(201, 180, 137, 0.55),
+    -6px 9px 0 rgba(178, 155, 112, 0.35);
+}
+
+/* the right leaf of a spread */
+.paper.pageR {
+  flex: 1 1 50%;
+  min-width: 0;
+  max-width: 670px;
+  border-radius: 0 3px 3px 0;
+  box-shadow:
+    inset 0 0 60px rgba(96, 70, 34, 0.18),
+    inset 34px 0 44px -24px rgba(60, 42, 18, 0.42),
+    0 2px 3px rgba(0, 0, 0, 0.5),
+    0 18px 60px rgba(0, 0, 0, 0.65),
+    0 40px 120px rgba(0, 0, 0, 0.5),
+    2px 3px 0 rgba(222, 205, 165, 0.8),
+    4px 6px 0 rgba(201, 180, 137, 0.55),
+    6px 9px 0 rgba(178, 155, 112, 0.35);
+}
+
+/* ——— turning a leaf ———
+   The spine is the hinge; the free edge does the moving. Turning
+   forward, the new leaf swings down onto the book, free edge last,
+   with a breath of counter-flex as the paper settles. Turning back,
+   the old leaf is uncovered leaning away, and settles flat. */
+
+.leaf {
+  position: relative;
+  transform-origin: left center;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.pageR .leaf,
+.pageSingle .leaf {
+  transform-origin: left center;
+  --liftFwd: -26deg; /* free right edge toward the reader */
+  --liftBack: 20deg; /* leaning away, being uncovered */
+}
+
+.pageL .leaf {
+  transform-origin: right center;
+  --liftFwd: 26deg;
+  --liftBack: -20deg;
+}
+
+.turnFwd {
+  animation: turnLeafFwd 0.62s cubic-bezier(0.22, 0.75, 0.25, 1) both;
+}
+
+.turnBack {
+  animation: turnLeafBack 0.62s cubic-bezier(0.22, 0.75, 0.25, 1) both;
+}
+
+@keyframes turnLeafFwd {
+  0% {
+    /* mostly-there reads as motion; invisible-to-visible reads as an apparition */
+    opacity: 0.45;
+    transform: perspective(1400px) rotateY(var(--liftFwd, -26deg));
+  }
+  45% {
+    opacity: 1;
+  }
+  78% {
+    /* a breath of counter-flex, like paper settling */
+    transform: perspective(1400px) rotateY(calc(var(--liftFwd, -26deg) * -0.07));
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(1400px) rotateY(0deg);
+  }
+}
+
+@keyframes turnLeafBack {
+  0% {
+    opacity: 0.45;
+    transform: perspective(1400px) rotateY(var(--liftBack, 20deg));
+  }
+  45% {
+    opacity: 1;
+  }
+  78% {
+    transform: perspective(1400px) rotateY(calc(var(--liftBack, 20deg) * -0.07));
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(1400px) rotateY(0deg);
+  }
+}
+
+/* ——— the date, in the diary's own faint hand ——— */
+
+.pageDate {
+  position: absolute;
+  top: clamp(18px, 3.4vmin, 32px);
+  right: clamp(24px, 5vmin, 52px);
+  font-family: var(--font-fell), serif;
+  font-style: italic;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  color: var(--ink-whisper);
+  opacity: 0.55;
+  user-select: none;
+}
+
+.pageL .pageDate {
+  right: auto;
+  left: clamp(24px, 5vmin, 52px);
+}
+
+/* ——— where the ink goes ——— */
+
+.pageBody {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* a page never scrolls — the hand writes smaller instead */
+  /* --fit shrinks as ink fills the leaf; all ink and sketches size in em */
+  font-size: calc(clamp(23px, 2.4vmin + 12px, 29px) * var(--fit, 1));
+  /* a breathing gutter so cursive swashes that lean past the line box
+     aren't clipped; the negative margin keeps the ink exactly where it was */
+  padding-inline: 0.35em;
+  margin-inline: -0.35em;
+}
+
+.fitWrap {
+  flex-shrink: 0;
+}
+
+.writerInk {
+  display: block;
+  /* the same swash gutter, inside the textarea's own clip box; the
+     widened width + negative margins leave the text pixel-aligned and
+     line wrapping unchanged (border-box: padding rides the extra width) */
+  width: calc(100% + 0.7em);
+  padding-inline: 0.35em;
+  margin-inline: -0.35em;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  overflow-y: auto;
+  scrollbar-width: none;
+  font-family: var(--font-writer), cursive;
+  font-size: 1em;
+  font-weight: 500;
+  line-height: 1.7;
+  color: var(--ink-writer);
+  caret-color: var(--ink-writer);
+  white-space: pre-wrap;
+  word-break: break-word;
+  text-shadow: 0 0 0.4px rgba(44, 58, 87, 0.5);
+}
+
+textarea.writerInk {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.writerInk::-webkit-scrollbar {
+  display: none;
+}
+
+.writerInk.committed {
+  min-height: 0;
+  flex-shrink: 0;
+}
+
+/* the moment Tom answers, your ink sinks to a ghost in the paper */
+.writerInk.drink {
+  animation: drink 1.6s cubic-bezier(0.5, 0, 0.75, 0.4) both;
+}
+
+@keyframes drink {
+  0% {
+    opacity: 1;
+    filter: blur(0);
+  }
+  45% {
+    opacity: 0.7;
+    filter: blur(0.5px);
+  }
+  100% {
+    opacity: 0.17;
+    filter: blur(0.7px);
+  }
+}
+
+/* long-since-drunk ink on remembered pages */
+.writerInk.ghost {
+  opacity: 0.17;
+  filter: blur(0.7px);
+}
+
+/* ——— Tom's hand ——— */
+
+.tomInk {
+  flex-shrink: 0;
+  font-family: var(--font-tom), cursive;
+  font-size: 1.2em;
+  font-weight: 500;
+  line-height: 1.75;
+  color: var(--ink-tom);
+  white-space: pre-wrap;
+  word-break: break-word;
+  padding-top: 0.5em;
+  text-shadow: 0 0 0.5px rgba(36, 26, 16, 0.55);
+}
+
+/* each character bleeds in like wet ink */
+.q {
+  animation: inkIn 0.55s ease-out both;
+}
+
+@keyframes inkIn {
+  from {
+    opacity: 0;
+    filter: blur(2.5px);
+  }
+  60% {
+    opacity: 0.9;
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* a sketch, developing on the paper like ink soaking through */
+.sketch {
+  display: block;
+  width: min(100%, 17em);
+  max-height: 12em;
+  object-fit: contain;
+  margin: 0.5em auto;
+  mix-blend-mode: multiply;
+  user-select: none;
+  animation: develop 2.5s cubic-bezier(0.3, 0.2, 0.2, 1) both;
+}
+
+.sketch.settled {
+  animation: none;
+}
+
+/* a drawing arriving stroke by stroke — the hand at work on the page */
+.liveInk {
+  height: auto;
+  aspect-ratio: 800 / 560;
+  animation: none; /* the strokes carry the arrival themselves */
+}
+
+.liveStroke {
+  animation: inkIn 0.5s ease-out both;
+}
+
+/* the critique's revision settling over the draft — brief, not a re-reveal */
+.sketch.resettle {
+  animation: resettle 0.7s ease both;
+}
+
+@keyframes resettle {
+  from {
+    opacity: 0.3;
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* an illustrated plate — period print set into the page, sandboxed */
+.plate {
+  display: block;
+  width: min(100%, 20em);
+  height: 13em;
+  margin: 0.5em auto;
+  border: 0;
+  pointer-events: none;
+  user-select: none;
+  mix-blend-mode: multiply;
+  opacity: 0; /* until its little document has painted */
+  animation: develop 2.5s cubic-bezier(0.3, 0.2, 0.2, 1) both;
+}
+
+.plate.inked {
+  opacity: 1;
+  transition: opacity 0.25s ease;
+}
+
+.plate.settled {
+  animation: none;
+}
+
+@keyframes develop {
+  0% {
+    opacity: 0;
+    filter: blur(6px) sepia(0.4);
+    transform: scale(0.985);
+  }
+  55% {
+    opacity: 0.8;
+    filter: blur(1.5px) sepia(0.2);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0) sepia(0);
+    transform: none;
+  }
+}
+
+/* an illustration on its way: the quill tries a flourish — a practice
+   stroke drawing and re-drawing itself, ink droplets welling beside it,
+   kin to the blot. No frame; just living ink. */
+.sketching {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25em;
+  margin: 0.6em auto 0.4em;
+  animation: whisper 0.9s ease both;
+}
+
+.flourish {
+  width: 6.5em;
+  height: 2.4em;
+  overflow: visible;
+}
+
+.flourish path {
+  fill: none;
+  stroke: rgba(36, 26, 16, 0.72);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: quillDraw 3s cubic-bezier(0.45, 0.1, 0.35, 1) infinite;
+}
+
+/* draw the stroke, let it sit, let the ink sink away, begin again */
+@keyframes quillDraw {
+  0% {
+    stroke-dashoffset: 1;
+    opacity: 0;
+  }
+  6% {
+    opacity: 1;
+  }
+  58% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  82% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+
+/* droplets shed by the working quill — the blot's little kin */
+.fDrop {
+  fill: rgba(36, 26, 16, 0.6);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: well 1.8s ease-in-out infinite;
+}
+
+.fDrop2 {
+  animation-delay: -0.9s;
+}
+
+.sketchWhisper {
+  font-family: var(--font-fell), serif;
+  font-style: italic;
+  font-size: max(12px, 0.5em);
+  letter-spacing: 0.06em;
+  color: var(--ink-whisper);
+  animation: breathe 2.6s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.95;
+  }
+}
+
+/* the page thinking: a small welling blot */
+.blot {
+  display: inline-block;
+  width: 0.32em;
+  height: 0.32em;
+  margin-left: 0.15em;
+  border-radius: 50% 46% 52% 48%;
+  background: radial-gradient(circle at 40% 35%, rgba(36, 26, 16, 0.85), rgba(36, 26, 16, 0.45));
+  vertical-align: baseline;
+  animation: well 1.8s ease-in-out infinite;
+}
+
+@keyframes well {
+  0%,
+  100% {
+    transform: scale(0.75);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.8;
+  }
+}
+
+/* ——— whispers on the page ——— */
+
+.hint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: clamp(30px, 5vmin, 52px);
+  text-align: center;
+  font-family: var(--font-fell), serif;
+  font-style: italic;
+  font-size: 16px;
+  letter-spacing: 0.05em;
+  color: var(--ink-whisper);
+  user-select: none;
+  pointer-events: none;
+  animation: whisper 3.2s ease 1.2s both;
+}
+
+.hint.faint {
+  font-size: 14px;
+  animation: whisper 2.4s ease 1.6s both;
+  opacity: 0.6;
+}
+
+.hintSub {
+  display: block;
+  margin-top: 0.5em;
+  font-size: 12px;
+  opacity: 0.65;
+}
+
+@keyframes whisper {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.8;
+  }
+}
+
+/* ——— the folded corners: how you turn the pages ——— */
+
+.corner {
+  position: absolute;
+  bottom: 0;
+  width: 64px;
+  height: 64px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  z-index: 4;
+  padding: 0;
+  outline: none; /* no focus rectangle on an invisible button… */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* …the fold itself lifts for keyboard visitors instead */
+.corner:focus-visible::before {
+  width: 46px;
+  height: 46px;
+}
+
+.corner:disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.corner::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 30px;
+  height: 30px;
+  transition:
+    width 0.25s cubic-bezier(0.2, 0.7, 0.3, 1),
+    height 0.25s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+.cornerR {
+  right: 0;
+  border-bottom-right-radius: 3px;
+}
+
+.cornerR::before {
+  right: 0;
+  /* outer corner shows the desk (page curled away); inner half is the fold */
+  background: linear-gradient(
+    135deg,
+    var(--paper-deep) 0%,
+    var(--paper-edge) 46%,
+    rgba(60, 42, 18, 0.5) 49.5%,
+    var(--desk) 50%,
+    var(--desk) 100%
+  );
+  box-shadow: -3px -3px 8px rgba(60, 42, 18, 0.18);
+}
+
+.cornerL {
+  left: 0;
+  border-bottom-left-radius: 3px;
+}
+
+.cornerL::before {
+  left: 0;
+  background: linear-gradient(
+    225deg,
+    var(--paper-deep) 0%,
+    var(--paper-edge) 46%,
+    rgba(60, 42, 18, 0.5) 49.5%,
+    var(--desk) 50%,
+    var(--desk) 100%
+  );
+  box-shadow: 3px -3px 8px rgba(60, 42, 18, 0.18);
+}
+
+.corner:hover::before {
+  width: 46px;
+  height: 46px;
+}
+
+/* ink moving on another page */
+.cornerBlot {
+  position: absolute;
+  bottom: 38px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50% 46% 52% 48%;
+  background: rgba(36, 26, 16, 0.7);
+  animation: well 1.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.cornerR .cornerBlot {
+  right: 38px;
+}
+
+.cornerL .cornerBlot {
+  left: 38px;
+}
+
+.pageNo {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: clamp(14px, 2.4vmin, 22px);
+  text-align: center;
+  font-family: var(--font-fell), serif;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  color: var(--ink-whisper);
+  opacity: 0.5;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* ——— candlelight & shadow ——— */
+
+.candlelight {
+  position: fixed;
+  inset: -10%;
+  pointer-events: none;
+  z-index: 2;
+  background: radial-gradient(
+    60% 50% at 50% 38%,
+    rgba(255, 189, 89, 0.075) 0%,
+    rgba(255, 160, 60, 0.03) 45%,
+    transparent 70%
+  );
+  animation: flicker 7s ease-in-out infinite;
+}
+
+@keyframes flicker {
+  0%,
+  100% {
+    opacity: 0.9;
+    transform: translate(0, 0) scale(1);
+  }
+  23% {
+    opacity: 1;
+    transform: translate(0.4%, -0.3%) scale(1.015);
+  }
+  41% {
+    opacity: 0.8;
+    transform: translate(-0.3%, 0.2%) scale(0.995);
+  }
+  67% {
+    opacity: 0.95;
+    transform: translate(0.2%, 0.35%) scale(1.008);
+  }
+  84% {
+    opacity: 0.85;
+    transform: translate(-0.25%, -0.2%) scale(1);
+  }
+}
+
+.vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  background: radial-gradient(
+    110% 90% at 50% 45%,
+    transparent 55%,
+    rgba(0, 0, 0, 0.35) 100%
+  );
+}
+
+/* ——— stillness for those who ask for it ——— */
+
+@media (prefers-reduced-motion: reduce) {
+  .candlelight {
+    animation: none;
+  }
+  .turnFwd,
+  .turnBack {
+    animation: none;
+  }
+  .book.revealing {
+    animation-duration: 0.4s;
+  }
+  .writerInk.drink {
+    animation: none;
+    opacity: 0.17;
+  }
+  .q {
+    animation-duration: 0.01s;
+  }
+  .sketch,
+  .plate,
+  .liveStroke {
+    animation-duration: 0.3s;
+  }
+  .flourish path {
+    animation: none;
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  .fDrop,
+  .sketchWhisper {
+    animation: none;
+  }
+  .actions,
+  .dl,
+  .actions {
+    transition: none;
+  }
+}
+
+/* ——— the press: a pale download mark on the desk's corner ——— */
+
+.actions {
+  position: fixed;
+  top: clamp(10px, 2.2vmin, 22px);
+  right: clamp(10px, 2.2vmin, 22px);
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  transition:
+    top 0.3s ease,
+    right 0.3s ease;
+}
+
+/* over the leaf it is printed, not hovering: ink like the page's date,
+   seated on the date's own line (position measured, set inline) */
+.actions.onPaper {
+  transform: translateY(-50%);
+}
+
+.actions.onPaper .dl {
+  color: var(--ink-whisper);
+  opacity: 0.75;
+}
+
+.actions.onPaper .dl:hover,
+.actions.onPaper .dl:focus-visible {
+  color: rgba(60, 42, 18, 0.9);
+  opacity: 1;
+}
+
+.actions.onPaper .actionsNote {
+  color: var(--ink-whisper);
+}
+
+.dl {
+  display: flex;
+  align-items: center;
+  border: none;
+  background: transparent;
+  padding: 8px;
+  cursor: pointer;
+  color: rgba(196, 190, 178, 0.5); /* light gray, always present */
+  transition:
+    color 0.3s ease,
+    opacity 0.3s ease;
+  outline: none;
+}
+
+.dl:hover,
+.dl:focus-visible {
+  color: rgba(232, 227, 214, 0.95);
+}
+
+.actionsNote {
+  margin-top: 4px;
+  padding-right: 8px;
+  font-family: var(--font-fell), serif;
+  font-style: italic;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  color: rgba(210, 180, 120, 0.6);
+  animation: whisper 0.6s ease both;
+}
